@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="account">
+	<select id="sequence" resultType="long">
+		select account_seq.nextval from dual
+	</select>
+
+	<insert id="join">
+		insert into account(
+			account_no, account_email, account_pw, 
+			account_nickname, account_tel
+		)	
+		values(
+			#{accountNo}, #{accountEmail}, #{accountPw},
+			#{accountNickname}, #{accountTel}
+		)
+	</insert>
+	
+	<select id="findByNo" resultType="AccountDto">
+		select * from account where account_no = #{accountNo}
+	</select>
+	
+	<select id="findByEmail" resultType="AccountDto">
+		select * from account where account_email = #{accountEmail}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
