@@ -10,5 +10,5 @@ public class CardDto {
 	private long cardNo;
 	private String cardTitle;
 	private int cardOrder;
-	private long columnNo;
+	private long laneNo;
 }

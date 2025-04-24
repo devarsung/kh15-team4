@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="lane">
+	<select id="sequence" resultType="long">
+		select lane_seq.nextval from dual
+	</select>
+
+	<insert id="add">
+		insert into lane(lane_no, lane_title, lane_order, board_no)
+		values(#{laneNo}, #{laneTitle}, #{laneOrder}, #{boardNo})
+	</insert>
+	
+	<select id="list" resultType="LaneDto">
+		select * from lane
+	</select>
+	
+	<select id="find" resultType="LaneDto">
+		select * from lane where lane_no = #{laneNo}
+	</select>
+	
+	<resultMap id="laneWithCardsDto" type="LaneWithCardsDto">
+		<association property="laneDto" javaType="LaneDto">
+	 		<result column="lane_no" property="laneNo"/>
+	 		<result column="lane_title" property="laneTitle"/>
+	 		<result column="lane_order" property="laneOrder"/>
+	 		<result column="board_no" property="boardNo"/>
+	 	</association>
+	 	<collection property="cards" javaType="List" ofType="CardDto" select="findCards" column="lane_no">
+	 		<result column="card_no" property="cardNo"/>
+	 		<result column="card_title" property="cardTitle"/>
+	 		<result column="card_order" property="cardOrder"/>
+	 		<result column="lane_no" property="laneNo"/>
+	 	</collection>
+	</resultMap>
+	
+	<select id="findLaneWithCards" resultMap="laneWithCardsDto">
+		select * from lane where board_no = #{boardNo}
+	</select>
+	
+	<select id="findCards" resultType="CardDto">
+		select * from card where lane_no = #{laneNo}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+

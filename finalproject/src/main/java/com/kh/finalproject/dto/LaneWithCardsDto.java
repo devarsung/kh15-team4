@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class CardColumnDto {
-	private ColumnDto columnDto;
+public class LaneWithCardsDto {
+	private LaneDto laneDto;
 	private List<CardDto> cards;
 }

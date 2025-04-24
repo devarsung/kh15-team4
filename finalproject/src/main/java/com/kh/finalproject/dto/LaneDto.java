@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class ColumnDto {
-	private long columnNo;
-	private String columnTitle;
-	private int columnOrder;
+public class LaneDto {
+	private long laneNo;
+	private String laneTitle;
+	private int laneOrder;
 	private long boardNo;
 }
