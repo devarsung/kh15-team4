@@ -26,7 +26,7 @@
 	
 	<update id="confirm">
 		update cert
-		set cert_confirm = systimestamp
+		set cert_confirm_time = systimestamp
 		where cert_email = #{certEmail}
 	</update>
 	

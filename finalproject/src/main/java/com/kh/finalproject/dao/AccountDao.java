@@ -21,6 +21,10 @@ public class AccountDao {
 		String encrypt = encoder.encode(accountDto.getAccountPw());
 		accountDto.setAccountPw(encrypt);
 		
+		//닉네임 초기 세팅
+		String nickname = accountDto.getAccountEmail().split("@")[0];
+		accountDto.setAccountNickname(nickname);
+		
 		//pk 추출
 		long accountNo = sqlSession.selectOne("account.sequence");
 		accountDto.setAccountNo(accountNo);
