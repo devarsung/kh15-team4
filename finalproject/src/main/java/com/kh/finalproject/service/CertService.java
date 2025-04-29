@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.kh.finalproject.configuration.CertProperties;
 import com.kh.finalproject.dao.CertDao;
 import com.kh.finalproject.dto.CertDto;
 import com.kh.finalproject.util.RandomGenerator;
@@ -21,6 +23,8 @@ public class CertService {
 	private JavaMailSender sender;
 	@Autowired
 	private RandomGenerator randomGenerator;
+	@Autowired
+	private CertProperties certProperties;
 	
 	public void sendCertEmail(String email) {
 		//인증번호 생성
@@ -64,5 +68,10 @@ public class CertService {
 		}
 		
 		return false;//인증 실패
+	}
+	
+	@Scheduled(cron = "0 0 * * * *")
+	public void cleanCertData() {
+		certDao.clean(certProperties.getExpireMinutes(), certProperties.getExpireAccept());
 	}
 }

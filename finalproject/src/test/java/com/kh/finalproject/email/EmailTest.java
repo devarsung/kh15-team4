@@ -18,5 +18,6 @@ public class EmailTest {
 	@Test
 	public void test() {
 		certService.sendCertEmail("devarsung@gmail.com");
+		//certService.cleanCertData();
 	}
 }

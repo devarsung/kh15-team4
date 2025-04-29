@@ -30,6 +30,28 @@
 		where cert_email = #{certEmail}
 	</update>
 	
+	<!-- 인증미완료+10분이상 || 인증완료+30분이상 -->
+	<delete id="clean">
+		delete cert where cert_email in(
+			select TMP.cert_email from(
+				select 
+					cert.*,
+					extract(day from (systimestamp - cert_time)) * 24 * 60 +
+					extract(hour from (systimestamp - cert_time)) * 60 +
+					extract(minute from (systimestamp - cert_time)) + 
+					extract(second from (systimestamp - cert_time)) / 60
+					as diff
+				from cert
+			)TMP
+			where
+			<![CDATA[
+				(cert_confirm_time is null and diff >= ${expireMinutes})
+				or
+				(cert_confirm_time is not null and diff >= ${expireAccept})
+			]]>
+		)
+	</delete>
+	
 </mapper>
 
 

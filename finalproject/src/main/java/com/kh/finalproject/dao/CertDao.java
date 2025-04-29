@@ -1,5 +1,8 @@
 package com.kh.finalproject.dao;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,5 +48,12 @@ public class CertDao {
 	
 	public boolean confirm(String certEmail) {
 		return sqlSession.update("cert.confirm", certEmail) > 0;
+	}
+	
+	public boolean clean(int expireMinutes, int expireAccept) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("expireMinutes", expireMinutes);
+		params.put("expireAccept", expireAccept);
+		return sqlSession.delete("cert.clean", params) > 0;
 	}
 }
