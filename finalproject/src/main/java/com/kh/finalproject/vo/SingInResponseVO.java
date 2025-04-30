@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class SingInResponseVO {
-	private long userNo;
+	private Long userNo;
 	private String userEmail;
 	private String accessToken;
 	private String refreshToken;

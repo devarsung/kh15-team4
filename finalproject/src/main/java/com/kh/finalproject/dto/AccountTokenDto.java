@@ -8,11 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class AccountDto {
-	private Long accountNo;
-	private String accountEmail;
-	private String accountPw;
-	private String accountNickname;
-	private String accountTel;
-	private Timestamp accountJoin;
+public class AccountTokenDto {
+	private Long accountTokenNo;
+	private Long accountTokenTarget;
+	private String accountTokenValue;
+	private Timestamp accountTokenTime;
 }

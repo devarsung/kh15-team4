@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class ClaimVO {
-	private long userNo;
+	private Long userNo;
 	private String userEmail;
 }
