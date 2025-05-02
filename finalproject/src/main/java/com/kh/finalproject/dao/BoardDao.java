@@ -1,5 +1,7 @@
 package com.kh.finalproject.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,6 +19,10 @@ public class BoardDao {
 		boardDto.setBoardNo(boardNo);
 		sqlSession.insert("board.add", boardDto);
 		return boardNo;
+	}
+	
+	public List<BoardDto> selectList(long accountNo) {
+		return sqlSession.selectList("board.list", accountNo);
 	}
 
 	public BoardDto selectOne(long boardNo) {

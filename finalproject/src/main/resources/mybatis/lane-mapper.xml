@@ -13,9 +13,35 @@
 		values(#{laneNo}, #{laneTitle}, #{laneOrder}, #{boardNo})
 	</insert>
 	
-	<select id="list" resultType="LaneDto">
-		select * from lane
+	<select id="nextOrderNumber" resultType="int">
+		select max(lane_order)+1 from lane where board_no = #{boardNo}
 	</select>
+	
+	<select id="list" resultType="LaneDto">
+		select * from lane where board_no = #{boardNo} order by lane_order asc
+	</select>
+	
+	<update id="updateOrder">
+		update lane set lane_order = #{laneOrder} where lane_no = #{laneNo}
+	</update>
+	
+	<update id="updateOrderAll">
+	  	update lane
+	  	set lane_order = 
+	    case 
+	      <foreach collection="laneDtoList" item="lane">
+	        when lane_no = #{lane.laneNo} THEN #{lane.laneOrder}
+	      </foreach>
+	    end
+	  	where lane_no in
+	    <foreach collection="laneDtoList" item="lane" separator="," open="(" close=")">
+	      #{lane.laneNo}
+	    </foreach>
+	</update>
+	
+	<delete id="deleteLane">
+		delete lane where lane_no = #{laneNo}
+	</delete>
 	
 	<select id="find" resultType="LaneDto">
 		select * from lane where lane_no = #{laneNo}

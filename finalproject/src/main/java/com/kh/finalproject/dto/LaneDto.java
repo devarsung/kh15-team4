@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class LaneDto {
-	private long laneNo;
+	private Long laneNo;
 	private String laneTitle;
 	private int laneOrder;
-	private long boardNo;
+	private Long boardNo;
 }
