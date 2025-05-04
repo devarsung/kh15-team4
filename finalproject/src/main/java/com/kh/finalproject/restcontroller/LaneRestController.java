@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.finalproject.dao.LaneDao;
 import com.kh.finalproject.dto.LaneDto;
+import com.kh.finalproject.dto.LaneWithCardsDto;
 import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.vo.OrderDataVO;
 
@@ -32,6 +33,12 @@ public class LaneRestController {
 		return laneDao.selectLaneList(boardNo);
 	}
 	
+	//보드의 레인(카드포함) 리스트
+	@GetMapping("/lanewithcards/{boardNo}") 
+	public List<LaneWithCardsDto> laneWithCardsList(@PathVariable long boardNo) {
+		return laneDao.selectLaneWithCards(boardNo);
+	}
+	
 	//보드에 레인 생성
 	@PostMapping("/{boardNo}")
 	public void create(@PathVariable long boardNo, @RequestBody LaneDto laneDto) {
@@ -42,12 +49,13 @@ public class LaneRestController {
 	//lane order 변경
 	@PutMapping("/order")
 	public void updateOrder(@RequestBody List<OrderDataVO> orderDataList) {
-		System.out.println(orderDataList);
 		for(OrderDataVO vo: orderDataList) {
 			laneDao.updateOrder(vo.getLaneNo(), vo.getLaneOrder());
 		}
 	}
 	
+	
+	//no로 레인 삭제
 	@DeleteMapping("/{laneNo}")
 	public void delete(@PathVariable long laneNo) {
 		LaneDto findDto = laneDao.selectOne(laneNo);

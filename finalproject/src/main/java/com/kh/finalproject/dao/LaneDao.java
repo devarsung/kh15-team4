@@ -30,8 +30,8 @@ public class LaneDao {
 		sqlSession.insert("lane.add", laneDto);
 	}
 	
-	public List<LaneWithCardsDto> findLaneWithCards(long boardNo) {
-		return sqlSession.selectList("lane.findLaneWithCards", boardNo);
+	public List<LaneWithCardsDto> selectLaneWithCards(long boardNo) {
+		return sqlSession.selectList("lane.selectLaneWithCards", boardNo);
 	}
 	
 	public boolean updateOrder(long laneNo, int laneOrder) {

@@ -54,7 +54,7 @@
 	 		<result column="lane_order" property="laneOrder"/>
 	 		<result column="board_no" property="boardNo"/>
 	 	</association>
-	 	<collection property="cards" javaType="List" ofType="CardDto" select="findCards" column="lane_no">
+	 	<collection property="cardList" javaType="List" ofType="CardDto" select="findCards" column="lane_no">
 	 		<result column="card_no" property="cardNo"/>
 	 		<result column="card_title" property="cardTitle"/>
 	 		<result column="card_order" property="cardOrder"/>
@@ -62,12 +62,12 @@
 	 	</collection>
 	</resultMap>
 	
-	<select id="findLaneWithCards" resultMap="laneWithCardsDto">
-		select * from lane where board_no = #{boardNo}
+	<select id="selectLaneWithCards" resultMap="laneWithCardsDto">
+		select * from lane where board_no = #{boardNo} order by lane_order asc
 	</select>
 	
 	<select id="findCards" resultType="CardDto">
-		select * from card where lane_no = #{laneNo}
+		select * from card where lane_no = #{laneNo} order by card_order asc
 	</select>
 	
 </mapper>

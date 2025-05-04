@@ -18,10 +18,10 @@ public class Test01query {
 	
 	@Test
 	public void test() {
-		List<LaneWithCardsDto> list = laneDao.findLaneWithCards(1);
+		List<LaneWithCardsDto> list = laneDao.selectLaneWithCards(1);
 		for(LaneWithCardsDto laneCardDto : list) {
 			System.out.println(laneCardDto.getLaneDto()); 
-			for(CardDto card : laneCardDto.getCards()) {
+			for(CardDto card : laneCardDto.getCardList()) {
 				System.out.println(card);
 			}
 		}
