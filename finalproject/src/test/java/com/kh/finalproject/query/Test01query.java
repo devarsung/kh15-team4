@@ -6,24 +6,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dao.LaneDao;
-import com.kh.finalproject.dto.CardDto;
-import com.kh.finalproject.dto.LaneWithCardsDto;
+import com.kh.finalproject.dto.LaneDto;
 
 @SpringBootTest
 public class Test01query {
 
 	@Autowired
 	private LaneDao laneDao;
+	@Autowired
+	private BoardDao boardDao;
 	
 	@Test
 	public void test() {
-		List<LaneWithCardsDto> list = laneDao.selectLaneWithCards(1);
-		for(LaneWithCardsDto laneCardDto : list) {
-			System.out.println(laneCardDto.getLaneDto()); 
-			for(CardDto card : laneCardDto.getCardList()) {
-				System.out.println(card);
-			}
-		}
+		
 	}
 }

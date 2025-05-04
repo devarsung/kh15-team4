@@ -8,16 +8,16 @@
 		select lane_seq.nextval from dual
 	</select>
 
-	<insert id="add">
+	<insert id="createLane">
 		insert into lane(lane_no, lane_title, lane_order, board_no)
 		values(#{laneNo}, #{laneTitle}, #{laneOrder}, #{boardNo})
 	</insert>
 	
-	<select id="nextOrderNumber" resultType="int">
+	<select id="selectNextOrder" resultType="int">
 		select max(lane_order)+1 from lane where board_no = #{boardNo}
 	</select>
 	
-	<select id="list" resultType="LaneDto">
+	<select id="selectLaneList" resultType="LaneDto">
 		select * from lane where board_no = #{boardNo} order by lane_order asc
 	</select>
 	
@@ -43,30 +43,29 @@
 		delete lane where lane_no = #{laneNo}
 	</delete>
 	
-	<select id="find" resultType="LaneDto">
+	<select id="selectOne" resultType="LaneDto">
 		select * from lane where lane_no = #{laneNo}
 	</select>
 	
-	<resultMap id="laneWithCardsDto" type="LaneWithCardsDto">
-		<association property="laneDto" javaType="LaneDto">
-	 		<result column="lane_no" property="laneNo"/>
-	 		<result column="lane_title" property="laneTitle"/>
-	 		<result column="lane_order" property="laneOrder"/>
-	 		<result column="board_no" property="boardNo"/>
-	 	</association>
-	 	<collection property="cardList" javaType="List" ofType="CardDto" select="findCards" column="lane_no">
-	 		<result column="card_no" property="cardNo"/>
+	<resultMap id="LaneFull" type="LaneDto">
+    	<result column="lane_no" property="laneNo"/>
+    	<result column="lane_title" property="laneTitle"/>
+    	<result column="lane_order" property="laneOrder"/>
+    	<result column="board_no" property="boardNo"/>
+
+	    <collection property="cardList" javaType="List" ofType="CardDto" select="selectCardList" column="lane_no">
+	        <result column="card_no" property="cardNo"/>
 	 		<result column="card_title" property="cardTitle"/>
 	 		<result column="card_order" property="cardOrder"/>
 	 		<result column="lane_no" property="laneNo"/>
-	 	</collection>
+	    </collection>
 	</resultMap>
 	
-	<select id="selectLaneWithCards" resultMap="laneWithCardsDto">
+	<select id="selectLaneFullList" resultMap="LaneFull">
 		select * from lane where board_no = #{boardNo} order by lane_order asc
 	</select>
 	
-	<select id="findCards" resultType="CardDto">
+	<select id="selectCardList" resultType="CardDto">
 		select * from card where lane_no = #{laneNo} order by card_order asc
 	</select>
 	

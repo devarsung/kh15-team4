@@ -34,9 +34,9 @@ public class LaneRestController {
 	}
 	
 	//보드의 레인(카드포함) 리스트
-	@GetMapping("/lanewithcards/{boardNo}") 
-	public List<LaneWithCardsDto> laneWithCardsList(@PathVariable long boardNo) {
-		return laneDao.selectLaneWithCards(boardNo);
+	@GetMapping("/lanefull/{boardNo}") 
+	public List<LaneDto> laneFullList(@PathVariable long boardNo) {
+		return laneDao.selectLaneFullList(boardNo);
 	}
 	
 	//보드에 레인 생성
@@ -54,18 +54,17 @@ public class LaneRestController {
 		}
 	}
 	
-	
 	//no로 레인 삭제
 	@DeleteMapping("/{laneNo}")
 	public void delete(@PathVariable long laneNo) {
 		LaneDto findDto = laneDao.selectOne(laneNo);
 		if(findDto == null) throw new TargetNotFoundException("대상 없음");
-		long boardNo = findDto.getBoardNo();
 		
+		long boardNo = findDto.getBoardNo();
 		laneDao.deleteLane(laneNo);
 		
+		//보드의 나머지 레인 order 변경
 		List<LaneDto> lanes = laneDao.selectLaneList(boardNo);
-		
 		if(lanes.size() <= 0) return;
 		
 		for (int i = 0; i < lanes.size(); i++) {

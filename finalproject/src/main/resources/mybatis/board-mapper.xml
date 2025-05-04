@@ -8,16 +8,16 @@
 		select board_seq.nextval from board
 	</select>
 
-	<insert id="add">
+	<insert id="createBoard">
 		insert into board(board_no, board_title, account_no)
 		values(#{boardNo}, #{boardTitle}, #{accountNo})
 	</insert>
 	
-	<select id="list" resultType="BoardDto">
+	<select id="selectBoardList" resultType="BoardDto">
 		select * from board where account_no = #{accountNo}
 	</select>
 	
-	<select id="find" resultType="BoardDto">
+	<select id="selectOne" resultType="BoardDto">
 		select * from board where board_no = #{boardNo}
 	</select>
 </mapper>

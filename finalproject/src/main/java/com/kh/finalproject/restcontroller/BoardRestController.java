@@ -32,17 +32,18 @@ public class BoardRestController {
 	public long create(@RequestBody BoardDto boardDto, @RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		boardDto.setAccountNo(((Long)claimVO.getUserNo()).longValue());
-		return boardDao.insert(boardDto);
+		return boardDao.createBoard(boardDto);
 	}
 	
-	//특정 회원의 보드 리스트 조회
+	//유저의 보드 리스트 조회
 	@GetMapping("/")
 	public List<BoardDto> list(@RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		long accountNo = ((Long)claimVO.getUserNo()).longValue();
-		return boardDao.selectList(accountNo);
+		return boardDao.selectBoardList(accountNo);
 	}
 	
+	//보드 no로 보드 상세 조회
 	@GetMapping("/{boardNo}")
 	public BoardDto find(@PathVariable long boardNo) {
 		return boardDao.selectOne(boardNo);

@@ -17,22 +17,31 @@ public class LaneDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<LaneDto> selectLaneList(long boardNo) {
-		return sqlSession.selectList("lane.list", boardNo);
-	}
-	
 	public void createLane(LaneDto laneDto) {
-		int nextOrderNumber = sqlSession.selectOne("lane.nextOrderNumber", laneDto.getBoardNo());
-		laneDto.setLaneOrder(nextOrderNumber);
+		int nextOrder = sqlSession.selectOne("lane.selectNextOrder", laneDto.getBoardNo());
+		laneDto.setLaneOrder(nextOrder);
 		
 		long laneNo = sqlSession.selectOne("lane.sequence");
 		laneDto.setLaneNo(laneNo);
-		sqlSession.insert("lane.add", laneDto);
+		sqlSession.insert("lane.createLane", laneDto);
 	}
 	
-	public List<LaneWithCardsDto> selectLaneWithCards(long boardNo) {
-		return sqlSession.selectList("lane.selectLaneWithCards", boardNo);
+	//no로 1개 찾기
+	public LaneDto selectOne(long laneNo) {
+		return sqlSession.selectOne("lane.selectOne", laneNo);
 	}
+	
+	
+	public List<LaneDto> selectLaneList(long boardNo) {
+		return sqlSession.selectList("lane.selectLaneList", boardNo);
+	}
+	
+	
+	
+	public List<LaneDto> selectLaneFullList(long boardNo) {
+		return sqlSession.selectList("lane.selectLaneFullList", boardNo);
+	}
+	
 	
 	public boolean updateOrder(long laneNo, int laneOrder) {
 		Map<String, Object> params = new HashMap<>();
@@ -52,8 +61,4 @@ public class LaneDao {
 		return sqlSession.delete("lane.deleteLane", laneNo) > 0;
 	}
 	
-	//no로 1개 찾기
-	public LaneDto selectOne(long laneNo) {
-		return sqlSession.selectOne("lane.find", laneNo);
-	}
 }

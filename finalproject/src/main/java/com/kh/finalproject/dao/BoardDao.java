@@ -14,18 +14,18 @@ public class BoardDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public long insert(BoardDto boardDto) {
+	public long createBoard(BoardDto boardDto) {
 		long boardNo = sqlSession.selectOne("board.sequence");
 		boardDto.setBoardNo(boardNo);
-		sqlSession.insert("board.add", boardDto);
+		sqlSession.insert("board.createBoard", boardDto);
 		return boardNo;
 	}
 	
-	public List<BoardDto> selectList(long accountNo) {
-		return sqlSession.selectList("board.list", accountNo);
+	public List<BoardDto> selectBoardList(long accountNo) {
+		return sqlSession.selectList("board.selectBoardList", accountNo);
 	}
 
 	public BoardDto selectOne(long boardNo) {
-		return sqlSession.selectOne("board.find", boardNo);
+		return sqlSession.selectOne("board.selectOne", boardNo);
 	}
 }
