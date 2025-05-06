@@ -31,17 +31,13 @@ public class LaneDao {
 		return sqlSession.selectOne("lane.selectOne", laneNo);
 	}
 	
-	
 	public List<LaneDto> selectLaneList(long boardNo) {
 		return sqlSession.selectList("lane.selectLaneList", boardNo);
 	}
 	
-	
-	
 	public List<LaneDto> selectLaneFullList(long boardNo) {
 		return sqlSession.selectList("lane.selectLaneFullList", boardNo);
 	}
-	
 	
 	public boolean updateOrder(long laneNo, int laneOrder) {
 		Map<String, Object> params = new HashMap<>();
