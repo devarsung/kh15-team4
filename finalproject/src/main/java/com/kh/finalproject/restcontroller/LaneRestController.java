@@ -48,10 +48,11 @@ public class LaneRestController {
 	
 	//lane order 변경
 	@PutMapping("/order")
-	public void updateOrder(@RequestBody List<OrderDataVO> orderDataList) {
-		for(OrderDataVO vo: orderDataList) {
-			laneDao.updateOrder(vo.getLaneNo(), vo.getLaneOrder());
-		}
+	public void updateOrder(@RequestBody List<LaneDto> laneDtoList) {
+		laneDao.updateOrderAll(laneDtoList);
+//		for(LaneDto laneDto: laneDtoList) {
+//			laneDao.updateOrder(laneDto.getLaneNo(), laneDto.getLaneOrder());
+//		}
 	}
 	
 	//no로 레인 삭제

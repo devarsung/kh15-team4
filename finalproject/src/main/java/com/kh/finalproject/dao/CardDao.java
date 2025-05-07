@@ -1,0 +1,46 @@
+package com.kh.finalproject.dao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.kh.finalproject.dto.CardDto;
+
+@Repository
+public class CardDao {
+
+	@Autowired
+	private SqlSession sqlSession;
+	
+	public void createCard(CardDto cardDto) {
+		int nextOrder = sqlSession.selectOne("card.selectNextOrder", cardDto.getLaneNo());
+		cardDto.setCardOrder(nextOrder);
+		long cardNo = sqlSession.selectOne("card.sequence");
+		cardDto.setCardNo(cardNo);
+		sqlSession.insert("card.createCard", cardDto);
+	}
+	
+	//no로 1개 찾기
+	public CardDto selectOne(long cardNo) {
+		return sqlSession.selectOne("card.selectOne", cardNo);
+	}
+	
+	public List<CardDto> selectCardList(long laneNo) {
+		return sqlSession.selectList("card.selectCardList", laneNo);
+	}
+	
+	public void updateOrderAll(List<CardDto> cardDtoList) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("cardDtoList", cardDtoList);
+		sqlSession.update("card.updateOrderAll", params);
+	}
+	
+	//카드 지우기
+	public boolean deleteCard(long cardNo) {
+		return sqlSession.delete("lane.deleteCard", cardNo) > 0;
+	}
+}
