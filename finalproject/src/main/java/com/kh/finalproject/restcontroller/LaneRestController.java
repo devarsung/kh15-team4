@@ -51,9 +51,6 @@ public class LaneRestController {
 	@PutMapping("/order")
 	public void updateOrder(@RequestBody List<LaneDto> laneDtoList) {
 		laneDao.updateOrderAll(laneDtoList);
-//		for(LaneDto laneDto: laneDtoList) {
-//			laneDao.updateOrder(laneDto.getLaneNo(), laneDto.getLaneOrder());
-//		}
 	}
 	
 	//no로 레인 삭제
