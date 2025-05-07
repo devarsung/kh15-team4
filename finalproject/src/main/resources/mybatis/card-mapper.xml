@@ -14,7 +14,7 @@
 	</insert>
 	
 	<select id="selectNextOrder" resultType="int">
-		select nvl(max(card_order)+1, 1) from card where lane_no = #{laneNo};
+		select nvl(max(card_order)+1, 1) from card where lane_no = #{laneNo}
 	</select>
 	
 	<select id="selectCardList" resultType="CardDto">
