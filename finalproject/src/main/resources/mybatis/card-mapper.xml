@@ -30,13 +30,17 @@
 	  	set card_order = 
 	    case 
 	      <foreach collection="cardDtoList" item="card">
-	        when card_no = #{card.cardNo} THEN #{card.cardOrder}
+	        when card_no = #{card.cardNo} then #{card.cardOrder}
 	      </foreach>
 	    end
 	  	where card_no in
 	    <foreach collection="cardDtoList" item="card" separator="," open="(" close=")">
 	      #{card.cardNo}
 	    </foreach>
+	</update>
+	
+	<update id="updateLaneNo">
+		update card set lane_no = #{laneNo} where card_no = #{cardNo}
 	</update>
 	
 	<delete id="deleteCard">

@@ -39,6 +39,11 @@ public class CardDao {
 		sqlSession.update("card.updateOrderAll", params);
 	}
 	
+	//laneNo 변경하기
+	public void updateLaneNo(CardDto cardDto) {
+		sqlSession.update("card.updateLaneNo", cardDto);
+	}
+	
 	//카드 지우기
 	public boolean deleteCard(long cardNo) {
 		return sqlSession.delete("lane.deleteCard", cardNo) > 0;

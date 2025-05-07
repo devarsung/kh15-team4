@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dao.LaneDao;
 import com.kh.finalproject.dto.CardDto;
-import com.kh.finalproject.dto.LaneDto;
+import com.kh.finalproject.dto.LaneFullDto;
 
 @SpringBootTest
 public class Test01query {
@@ -21,10 +21,10 @@ public class Test01query {
 	
 	@Test
 	public void test() {
-		List<LaneDto> list = laneDao.selectLaneFullList(1);
-		for(LaneDto lane: list) {
-			System.out.println(lane);
-			for(CardDto card : lane.getCardList()) {
+		List<LaneFullDto> list = laneDao.selectLaneFullList(1);
+		for(LaneFullDto laneFullDto: list) {
+			System.out.println(laneFullDto);
+			for(CardDto card : laneFullDto.getCardList()) {
 				System.out.println(card);
 			}
 		}

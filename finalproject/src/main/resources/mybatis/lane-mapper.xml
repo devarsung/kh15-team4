@@ -47,7 +47,7 @@
 		select * from lane where lane_no = #{laneNo}
 	</select>
 	
-	<resultMap id="LaneFull" type="LaneDto">
+	<!-- <resultMap id="LaneFull" type="LaneDto">
     	<result column="lane_no" property="laneNo"/>
     	<result column="lane_title" property="laneTitle"/>
     	<result column="lane_order" property="laneOrder"/>
@@ -59,7 +59,22 @@
 	 		<result column="card_order" property="cardOrder"/>
 	 		<result column="lane_no" property="laneNo"/>
 	    </collection>
-	</resultMap>
+	</resultMap> -->
+	
+	<resultMap type="LaneFullDto" id="LaneFull">
+	 	<association property="laneDto" javaType="LaneDto">
+	 		<result column="lane_no" property="laneNo"/>
+	    	<result column="lane_title" property="laneTitle"/>
+	    	<result column="lane_order" property="laneOrder"/>
+	    	<result column="board_no" property="boardNo"/>
+	 	</association>
+	 	<collection property="cardList" javaType="List" ofType="CardDto" select="selectCardList" column="lane_no">
+	        <result column="card_no" property="cardNo"/>
+	 		<result column="card_title" property="cardTitle"/>
+	 		<result column="card_order" property="cardOrder"/>
+	 		<result column="lane_no" property="laneNo"/>
+	    </collection>
+	 </resultMap>
 	
 	<select id="selectLaneFullList" resultMap="LaneFull">
 		select * from lane where board_no = #{boardNo} order by lane_order asc

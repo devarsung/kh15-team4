@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.finalproject.dao.LaneDao;
 import com.kh.finalproject.dto.LaneDto;
-import com.kh.finalproject.dto.LaneWithCardsDto;
+import com.kh.finalproject.dto.LaneFullDto;
 import com.kh.finalproject.error.TargetNotFoundException;
-import com.kh.finalproject.vo.OrderDataVO;
+import com.kh.finalproject.service.LaneService;
+import com.kh.finalproject.vo.LaneCardMapVO;
 
 @CrossOrigin
 @RestController
@@ -35,7 +36,7 @@ public class LaneRestController {
 	
 	//보드의 레인(카드포함) 리스트
 	@GetMapping("/lanefull/{boardNo}") 
-	public List<LaneDto> laneFullList(@PathVariable long boardNo) {
+	public List<LaneFullDto> laneFullList(@PathVariable long boardNo) {
 		return laneDao.selectLaneFullList(boardNo);
 	}
 	

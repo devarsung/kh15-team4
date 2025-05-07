@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.finalproject.dto.LaneDto;
-import com.kh.finalproject.dto.LaneWithCardsDto;
+import com.kh.finalproject.dto.LaneFullDto;
 
 @Repository
 public class LaneDao {
@@ -35,7 +35,7 @@ public class LaneDao {
 		return sqlSession.selectList("lane.selectLaneList", boardNo);
 	}
 	
-	public List<LaneDto> selectLaneFullList(long boardNo) {
+	public List<LaneFullDto> selectLaneFullList(long boardNo) {
 		return sqlSession.selectList("lane.selectLaneFullList", boardNo);
 	}
 	

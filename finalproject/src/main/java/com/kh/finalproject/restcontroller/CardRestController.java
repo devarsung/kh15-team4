@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.finalproject.dao.CardDao;
 import com.kh.finalproject.dto.CardDto;
 import com.kh.finalproject.error.TargetNotFoundException;
+import com.kh.finalproject.vo.OrderDataVO;
 
 @CrossOrigin
 @RestController
@@ -35,6 +36,18 @@ public class CardRestController {
 	@PutMapping("/order")
 	public void updateOrder(@RequestBody List<CardDto> cardDtoList) {
 		cardDao.updateOrderAll(cardDtoList);
+	}
+	
+	//card order 변경(레인 간)
+	@PutMapping("/orderBetween")
+	public void updateOrderBetween(@RequestBody OrderDataVO orderDataVO) {
+		cardDao.updateLaneNo(orderDataVO.getCard());
+		if(!orderDataVO.getStarting().isEmpty()) {
+			cardDao.updateOrderAll(orderDataVO.getStarting());
+		}
+		if(!orderDataVO.getArrival().isEmpty()) {
+			cardDao.updateOrderAll(orderDataVO.getArrival());
+		}
 	}
 	
 	//no로 카드 삭제

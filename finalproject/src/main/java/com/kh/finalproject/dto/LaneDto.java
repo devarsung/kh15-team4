@@ -13,5 +13,5 @@ public class LaneDto {
 	private String laneTitle;
 	private int laneOrder;
 	private Long boardNo;
-	private List<CardDto> cardList;
+	//private List<CardDto> cardList;
 }

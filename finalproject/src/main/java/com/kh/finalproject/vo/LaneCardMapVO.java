@@ -1,8 +1,9 @@
 package com.kh.finalproject.vo;
 
-import java.util.List;
+import java.util.Map;
 
 import com.kh.finalproject.dto.CardDto;
+import com.kh.finalproject.dto.LaneDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class OrderDataVO {
-	private List<CardDto> starting;
-	private List<CardDto> arrival;
-	private CardDto card;
+public class LaneCardMapVO {
+	private Map<String, LaneDto> laneMap;
+	private Map<String, CardDto> cardMap;
 }
