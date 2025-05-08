@@ -17,8 +17,6 @@ import com.kh.finalproject.dao.LaneDao;
 import com.kh.finalproject.dto.LaneDto;
 import com.kh.finalproject.dto.LaneFullDto;
 import com.kh.finalproject.error.TargetNotFoundException;
-import com.kh.finalproject.service.LaneService;
-import com.kh.finalproject.vo.LaneCardMapVO;
 
 @CrossOrigin
 @RestController
@@ -71,4 +69,5 @@ public class LaneRestController {
 		}
 		laneDao.updateOrderAll(lanes);
 	}
+
 }
