@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class AccountTokenDto {
-	private Long accountTokenNo;
-	private Long accountTokenTarget;
+	private long accountTokenNo;
+	private long accountTokenTarget;
 	private String accountTokenValue;
 	private Timestamp accountTokenTime;
 }

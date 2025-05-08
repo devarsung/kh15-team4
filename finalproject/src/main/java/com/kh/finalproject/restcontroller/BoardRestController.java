@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dto.BoardDto;
+import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
 
@@ -31,7 +33,9 @@ public class BoardRestController {
 	@PostMapping("/")
 	public long create(@RequestBody BoardDto boardDto, @RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
-		boardDto.setAccountNo(((Long)claimVO.getUserNo()).longValue());
+		long accountNo = claimVO.getUserNo();
+		boardDto.setAccountNo(accountNo);
+		//boardDto.setAccountNo(((Long)claimVO.getUserNo()).longValue());
 		return boardDao.createBoard(boardDto);
 	}
 	
@@ -39,7 +43,7 @@ public class BoardRestController {
 	@GetMapping("/")
 	public List<BoardDto> list(@RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
-		long accountNo = ((Long)claimVO.getUserNo()).longValue();
+		long accountNo = claimVO.getUserNo();
 		return boardDao.selectBoardList(accountNo);
 	}
 	
@@ -47,5 +51,16 @@ public class BoardRestController {
 	@GetMapping("/{boardNo}")
 	public BoardDto find(@PathVariable long boardNo) {
 		return boardDao.selectOne(boardNo);
+	}
+	
+	@DeleteMapping("/{boardNo}")
+	public void delete(@PathVariable long boardNo, @RequestHeader("Authorization") String accessToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		long accountNo = claimVO.getUserNo();
+		BoardDto boardDto = boardDao.selectOne(boardNo);
+		if(boardDto == null)
+			throw new TargetNotFoundException("존재하지 않는 보드");
+		//if(boardDto.getAccountNo() != accountNo)
+		
 	}
 }

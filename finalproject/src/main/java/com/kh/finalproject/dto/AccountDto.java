@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class AccountDto {
-	private Long accountNo;
+	private long accountNo;
 	private String accountEmail;
 	private String accountPw;
 	private String accountNickname;
