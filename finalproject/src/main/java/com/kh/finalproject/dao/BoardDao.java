@@ -28,4 +28,8 @@ public class BoardDao {
 	public BoardDto selectOne(long boardNo) {
 		return sqlSession.selectOne("board.selectOne", boardNo);
 	}
+
+	public boolean deleteBoard(long boardNo) {
+		return sqlSession.delete("board.deleteBoard", boardNo) > 0;
+	}
 }

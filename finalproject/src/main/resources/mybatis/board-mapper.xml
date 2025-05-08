@@ -20,6 +20,10 @@
 	<select id="selectOne" resultType="BoardDto">
 		select * from board where board_no = #{boardNo}
 	</select>
+	
+	<delete id="deleteBoard">
+		delete board where board_no = #{boardNo}
+	</delete>
 </mapper>
 
 

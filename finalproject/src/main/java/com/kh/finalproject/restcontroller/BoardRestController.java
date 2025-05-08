@@ -53,6 +53,7 @@ public class BoardRestController {
 		return boardDao.selectOne(boardNo);
 	}
 	
+	//보드 삭제
 	@DeleteMapping("/{boardNo}")
 	public void delete(@PathVariable long boardNo, @RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
@@ -60,7 +61,9 @@ public class BoardRestController {
 		BoardDto boardDto = boardDao.selectOne(boardNo);
 		if(boardDto == null)
 			throw new TargetNotFoundException("존재하지 않는 보드");
-		//if(boardDto.getAccountNo() != accountNo)
+		if(boardDto.getAccountNo() != accountNo)
+			throw new TargetNotFoundException("소유자 불일치");
 		
+		boardDao.deleteBoard(boardNo);
 	}
 }
