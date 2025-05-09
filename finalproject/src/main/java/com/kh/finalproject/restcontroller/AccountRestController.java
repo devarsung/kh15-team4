@@ -3,6 +3,7 @@ package com.kh.finalproject.restcontroller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -89,5 +90,23 @@ public class AccountRestController {
 				.accessToken(tokenService.generateAccessToken(claimVO))
 				.refreshToken(tokenService.generateRefreshToken(claimVO))
 			.build();
+	}
+	
+	//no로 1명 찾기
+	@GetMapping("/{accountNo}")
+	public AccountDto asdf(@PathVariable long accountNo) {
+		AccountDto findDto = accountDao.selectOne(accountNo);
+		if(findDto == null) {
+			throw new TargetNotFoundException("없는 회원");
+		}
+		findDto.setAccountPw(null);
+		return findDto;
+	}
+	
+	//정보 수정
+	@PatchMapping("/{accountNo}")
+	public void edit(@PathVariable long accountNo, @RequestBody AccountDto accountDto) {
+		accountDto.setAccountNo(accountNo);//아이디 덮어쓰기
+		accountDao.updateAccountInfo(accountDto);
 	}
 }

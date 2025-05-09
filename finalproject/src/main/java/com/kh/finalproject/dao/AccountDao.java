@@ -46,4 +46,8 @@ public class AccountDao {
 		boolean isValid = encoder.matches(accountDto.getAccountPw(), findDto.getAccountPw());
 		return isValid ? findDto : null;
 	}
+	
+	public boolean updateAccountInfo(AccountDto accountDto) {
+		return sqlSession.update("account.updateAccountInfo", accountDto) > 0;
+	}
 }

@@ -1,6 +1,8 @@
 package com.kh.finalproject.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +33,20 @@ public class BoardDao {
 
 	public boolean deleteBoard(long boardNo) {
 		return sqlSession.delete("board.deleteBoard", boardNo) > 0;
+	}
+	
+	public void enterBoard(long boardNo, long accountNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("boardNo", boardNo);
+		params.put("accountNo", accountNo);
+		sqlSession.insert("board.enterBoard", params);
+	}
+	
+	public boolean selectBoardMember(long boardNo, long accountNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("boardNo", boardNo);
+		params.put("accountNo", accountNo);
+		int count = sqlSession.selectOne("board.selectBoardMember", params);
+		return count > 0;
 	}
 }

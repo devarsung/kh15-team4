@@ -5,7 +5,7 @@
   
 <mapper namespace="board">
 	<select id="sequence" resultType="long">
-		select board_seq.nextval from board
+		select board_seq.nextval from dual
 	</select>
 
 	<insert id="createBoard">
@@ -24,6 +24,15 @@
 	<delete id="deleteBoard">
 		delete board where board_no = #{boardNo}
 	</delete>
+	
+	<insert id="enterBoard">
+		insert into board_member(board_no, account_no)
+		values(#{boardNo}, #{accountNo})
+	</insert>
+	
+	<select id="selectBoardMember" resultType="int">
+		select count(*) from board_member where board_no = #{boardNo} and account_no = #{accountNo}
+	</select>
 </mapper>
 
 

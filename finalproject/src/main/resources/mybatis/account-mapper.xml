@@ -27,6 +27,80 @@
 		select * from account where account_email = #{accountEmail}
 	</select>
 	
+	<update id="updateAccountInfo">
+		update account 
+			<set>
+				<if test="accountNickname != null">
+					account_nickname = #{accountNickname},
+				</if>
+				<if test="accountEmail != null">
+					account_email = #{accountEmail},
+				</if>
+				<if test="accountTel != null">
+					account_tel = #{accountTel},
+				</if>
+				<!-- account_change = systimestamp -->
+			</set>
+		where account_no = #{accountNo}
+	</update>
+	
+	<select id="complexSearch" resultType="AccountDto">
+		<!-- 모듈화된 top n query 헤더를 불러오도록 설정 -->
+		<include refid="top-n-header"></include>
+	
+		select
+			account_no, account_nickname, account_email,
+			account_tel, account_join, 
+		from account
+		
+		<include refid="complex-condition"></include>
+		
+		<!-- 정렬 -->
+		order by 
+		<if test="order != null">
+			${order},
+		</if>
+		 account_no asc
+		
+		<!-- 모듈화된 top n query 푸터를 불러오도록 설정 -->
+		<include refid="top-n-footer"></include>
+	</select>
+	
+	<select id="complexSearchCount" resultType="long">
+		select count(*) from account
+		<include refid="complex-condition"></include>
+	</select>
+	
+	<!-- 반복적으로 사용하는 구문을 모듈화 -->
+	<sql id="top-n-header">
+		<if test="beginRow != null and endRow != null">
+			select * from (
+				select rownum rn, TMP.* from (
+		</if>
+	</sql>
+	
+	<sql id="top-n-footer">
+		<if test="beginRow != null and endRow != null">
+				)TMP
+			)
+			where rn between #{beginRow} and #{endRow}
+		</if>
+	</sql>
+	
+	
+	<!-- 검색 keyword가 nickname 또는 email에 있는지 -->
+	<sql id="complex-condition">
+		<where>
+			<if test="keyword != null">
+				and (
+					instr(account_nickname, #{keyword}) > 0
+					or
+					instr(account_email, #{keyword}) > 0
+				)
+			</if>
+		</where>
+	</sql>
+	
 </mapper>
 
 

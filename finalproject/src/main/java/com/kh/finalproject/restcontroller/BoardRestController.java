@@ -66,4 +66,20 @@ public class BoardRestController {
 		
 		boardDao.deleteBoard(boardNo);
 	}
+	
+	@PostMapping("/enter/{boardNo}")
+	public void enter(@PathVariable long boardNo, @RequestHeader("Authorization") String accessToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		long accountNo = claimVO.getUserNo();
+		BoardDto boardDto = boardDao.selectOne(boardNo);
+		if(boardDto == null)
+			throw new TargetNotFoundException("존재하지 않는 보드");
+		
+		//보드의 멤버인지 확인
+		boolean isMember = boardDao.selectBoardMember(boardNo, accountNo);
+		if(isMember == false) {
+			boardDao.enterBoard(boardNo, accountNo);
+		}
+	}
+	
 }
