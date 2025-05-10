@@ -27,6 +27,10 @@
 		select * from account where account_email = #{accountEmail}
 	</select>
 	
+	<select id="findNicknameByNo" resultType="String">
+		select account_nickname from account where account_no = #{accountNo}
+	</select>
+	
 	<update id="updateAccountInfo">
 		update account 
 			<set>

@@ -50,4 +50,8 @@ public class AccountDao {
 	public boolean updateAccountInfo(AccountDto accountDto) {
 		return sqlSession.update("account.updateAccountInfo", accountDto) > 0;
 	}
+
+	public String findNicknameByNo(long accountNo) {
+		return sqlSession.selectOne("account.findNicknameByNo", accountNo);
+	}
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class SingInResponseVO {
 	private long userNo;
 	private String userEmail;
+	private String userNickname;
 	private String accessToken;
 	private String refreshToken;
 }

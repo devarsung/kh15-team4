@@ -56,6 +56,7 @@ public class AccountRestController {
 		return SingInResponseVO.builder()
 				.userNo(findDto.getAccountNo())
 				.userEmail(findDto.getAccountEmail())
+				.userNickname(findDto.getAccountNickname())
 				.accessToken(tokenService.generateAccessToken(findDto))
 				.refreshToken(tokenService.generateRefreshToken(findDto))
 			.build();
@@ -78,15 +79,18 @@ public class AccountRestController {
 		//userNo와 refreshToken을 이용해서 발급내역 조회(DB 조회)
 		//발급내역이 있으면 삭제하기
 		boolean isValid = tokenService.checkBearerToken(claimVO, refreshToken);
-		
 		if(isValid == false) {
 			throw new TargetNotFoundException("정보 불일치");
 		}
+		
+		//닉네임 조회
+		String nickname = accountDao.findNicknameByNo(claimVO.getUserNo());
 		
 		//신규 로그인 정보 재발행 및 반환(accessToken, refreshToken 재발행)
 		return SingInResponseVO.builder()
 				.userNo(claimVO.getUserNo())
 				.userEmail(claimVO.getUserEmail())
+				.userNickname(nickname)
 				.accessToken(tokenService.generateAccessToken(claimVO))
 				.refreshToken(tokenService.generateRefreshToken(claimVO))
 			.build();
