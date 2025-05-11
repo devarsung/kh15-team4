@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dto.BoardDto;
+import com.kh.finalproject.dto.BoardInviteDto;
+import com.kh.finalproject.dto.InviteViewDto;
 import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
@@ -81,6 +83,22 @@ public class BoardRestController {
 		if(isMember == false) {
 			boardDao.enterBoard(boardNo, accountNo);
 		}
+	}
+	
+	//보드 초대
+	@PostMapping("/invite")
+	public void invite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		long accountNo = claimVO.getUserNo();
+		boardInviteDto.setSenderNo(accountNo);
+		boardDao.createBoardInvite(boardInviteDto);
+	}
+	
+	@GetMapping("/invite")
+	public List<InviteViewDto> inviteList(@RequestHeader("Authorization") String accessToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		long accountNo = claimVO.getUserNo();
+		return boardDao.selectInviteViewList(accountNo);
 	}
 	
 }

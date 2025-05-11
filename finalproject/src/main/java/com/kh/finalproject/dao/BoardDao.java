@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.finalproject.dto.BoardDto;
+import com.kh.finalproject.dto.BoardInviteDto;
+import com.kh.finalproject.dto.InviteViewDto;
 
 @Repository
 public class BoardDao {
@@ -48,5 +50,17 @@ public class BoardDao {
 		params.put("accountNo", accountNo);
 		int count = sqlSession.selectOne("board.selectBoardMember", params);
 		return count > 0;
+	}
+	
+	//보드 초대
+	public void createBoardInvite(BoardInviteDto boardInviteDto) {
+		long boardInviteNo = sqlSession.selectOne("board.boardInviteSequence");
+		boardInviteDto.setBoardInviteNo(boardInviteNo);
+		sqlSession.insert("board.createBoardInvite", boardInviteDto);
+	}
+	
+	//초대장 목록
+	public List<InviteViewDto> selectInviteViewList(long accountNo) {
+		return sqlSession.selectList("board.selectInviteViewList", accountNo);
 	}
 }

@@ -33,6 +33,25 @@
 	<select id="selectBoardMember" resultType="int">
 		select count(*) from board_member where board_no = #{boardNo} and account_no = #{accountNo}
 	</select>
+	
+	<!-- 보드에 초대 -->
+	<select id="boardInviteSequence" resultType="long">
+		select board_invite_seq.nextval from dual
+	</select>
+	
+	<insert id="createBoardInvite">
+		insert into board_invite(
+			board_invite_no, board_no, sender_no, receiver_no
+		)
+		values(
+			#{boardInviteNo}, #{boardNo}, #{senderNo}, #{receiverNo}
+		)
+	</insert>
+	
+	<!-- 보드 초대 목록 -->
+	<select id="selectInviteViewList" resultType="InviteViewDto">
+		select * from invite_view where receiver_no = #{accountNo}
+	</select>
 </mapper>
 
 
