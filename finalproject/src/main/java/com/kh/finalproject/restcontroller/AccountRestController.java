@@ -1,5 +1,7 @@
 package com.kh.finalproject.restcontroller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
 import com.kh.finalproject.vo.SingInResponseVO;
+import com.kh.finalproject.vo.UserSearchVO;
 
 @CrossOrigin
 @RestController
@@ -112,5 +115,10 @@ public class AccountRestController {
 	public void edit(@PathVariable long accountNo, @RequestBody AccountDto accountDto) {
 		accountDto.setAccountNo(accountNo);//아이디 덮어쓰기
 		accountDao.updateAccountInfo(accountDto);
+	}
+	
+	@PostMapping("/search")
+	public List<AccountDto> search(@RequestBody UserSearchVO userSearchVO) {
+		return accountDao.complexSearch(userSearchVO);
 	}
 }

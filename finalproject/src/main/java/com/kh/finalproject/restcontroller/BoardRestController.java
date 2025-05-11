@@ -44,7 +44,8 @@ public class BoardRestController {
 	public List<BoardDto> list(@RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		long accountNo = claimVO.getUserNo();
-		return boardDao.selectBoardList(accountNo);
+		List<BoardDto> result = boardDao.selectBoardList(accountNo);
+		return result;
 	}
 	
 	//보드 no로 보드 상세 조회

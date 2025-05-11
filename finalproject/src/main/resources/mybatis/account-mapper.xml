@@ -54,17 +54,13 @@
 	
 		select
 			account_no, account_nickname, account_email,
-			account_tel, account_join, 
+			account_tel, account_join
 		from account
 		
 		<include refid="complex-condition"></include>
 		
 		<!-- 정렬 -->
-		order by 
-		<if test="order != null">
-			${order},
-		</if>
-		 account_no asc
+		order by account_no asc
 		
 		<!-- 모듈화된 top n query 푸터를 불러오도록 설정 -->
 		<include refid="top-n-footer"></include>
@@ -90,7 +86,6 @@
 			where rn between #{beginRow} and #{endRow}
 		</if>
 	</sql>
-	
 	
 	<!-- 검색 keyword가 nickname 또는 email에 있는지 -->
 	<sql id="complex-condition">

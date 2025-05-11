@@ -1,11 +1,14 @@
 package com.kh.finalproject.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.kh.finalproject.dto.AccountDto;
+import com.kh.finalproject.vo.UserSearchVO;
 
 @Repository
 public class AccountDao {
@@ -53,5 +56,9 @@ public class AccountDao {
 
 	public String findNicknameByNo(long accountNo) {
 		return sqlSession.selectOne("account.findNicknameByNo", accountNo);
+	}
+	
+	public List<AccountDto> complexSearch(UserSearchVO userSearchVO) {
+		return sqlSession.selectList("account.complexSearch", userSearchVO);
 	}
 }
