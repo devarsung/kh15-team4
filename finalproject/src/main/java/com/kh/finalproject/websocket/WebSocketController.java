@@ -9,7 +9,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import com.kh.finalproject.dao.AccountDao;
+import com.kh.finalproject.dao.BoardDao;
+import com.kh.finalproject.dto.AccountDto;
 import com.kh.finalproject.dto.BoardInviteDto;
+import com.kh.finalproject.service.TokenService;
+import com.kh.finalproject.vo.ClaimVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,14 +63,36 @@ public class WebSocketController {
 		messagingTemplate.convertAndSend("/public/chat", body);
 	}
 	
+	@Autowired
+	private TokenService tokenService;
+	@Autowired
+	private AccountDao accountDao;
+	@Autowired
+	private BoardDao boardDao;
+	
 	@MessageMapping("/invite")
 	public void invite(Message<BoardInviteDto> message) {
 		//정보 분석(header)
 		StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-		//String uuid = accessor.getFirstNativeHeader("uuid");
+		String accessToken = accessor.getFirstNativeHeader("accessToken");
+		if(accessToken == null || accessToken.startsWith("Bearer ") == false) return;
+		
+		//회원정보 조회
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		AccountDto accountDto = accountDao.selectOne(claimVO.getUserNo());
+		if(accountDto == null) return;
 		
 		//메세지 해석(body)
 		BoardInviteDto body = message.getPayload();
+		
+		
+		//초대장을 보낸 상대가 이미 보드의 멤버인지 확인
+		boolean isMember = boardDao.selectBoardMember(body.getBoardNo(), body.getReceiverNo());
+		if(isMember == false) {
+			body.setSenderNo(accountDto.getAccountNo());
+			//boardDao.createBoardInvite(body);
+		}
+		
 		log.debug("body = {}", body);
 		
 		//[2]무슨 처리를 한다
@@ -76,7 +103,7 @@ public class WebSocketController {
 //		
 //		//[3]수동으로 메세지를 보내자
 //		//messagingTemplate.convertAndSend("채널명", 데이터);
-//		messagingTemplate.convertAndSend("/public/chat", body);
+//		messagingTemplate.convertAndSend("/private/invite/" + body.getReceiverNo(), body);
 	}
 	
 }
