@@ -37,8 +37,11 @@ public class BoardRestController {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		long accountNo = claimVO.getUserNo();
 		boardDto.setAccountNo(accountNo);
-		//boardDto.setAccountNo(((Long)claimVO.getUserNo()).longValue());
-		return boardDao.createBoard(boardDto);
+		long boardNo = boardDao.createBoard(boardDto);
+		
+		//보드 만들고 입장처리
+		boardDao.enterBoard(boardNo, accountNo);
+		return boardNo;
 	}
 	
 	//유저의 보드 리스트 조회
@@ -70,6 +73,7 @@ public class BoardRestController {
 		boardDao.deleteBoard(boardNo);
 	}
 	
+	//보드에 입장하는
 	@PostMapping("/enter/{boardNo}")
 	public void enter(@PathVariable long boardNo, @RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
@@ -85,7 +89,7 @@ public class BoardRestController {
 		}
 	}
 	
-	//보드 초대
+	//보드 초대장 보내기
 	@PostMapping("/invite")
 	public void invite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
@@ -94,6 +98,7 @@ public class BoardRestController {
 		boardDao.createBoardInvite(boardInviteDto);
 	}
 	
+	//초대장 리스트 화면
 	@GetMapping("/invite")
 	public List<InviteViewDto> inviteList(@RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
