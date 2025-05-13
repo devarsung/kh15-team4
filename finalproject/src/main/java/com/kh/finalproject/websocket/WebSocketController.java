@@ -93,6 +93,7 @@ public class WebSocketController {
 		//거절 이력 확인
 		//pending 상태의 초대장이 있는지 확인
 		boolean isMember = boardDao.selectBoardMember(body.getBoardNo(), body.getReceiverNo());
+		boolean isPending = true;
 		if(isMember == false) {
 			body.setSenderNo(accountDto.getAccountNo());
 			//초대장 보내기
@@ -100,7 +101,7 @@ public class WebSocketController {
 			messagingTemplate.convertAndSend("/private/invite/" + body.getReceiverNo(), response);
 			
 			//db 저장
-			//inviteDao.createBoardInvite(body);
+			inviteDao.createBoardInvite(body);
 		}
 		else {
 			log.debug("같은 사람");

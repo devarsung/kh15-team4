@@ -27,18 +27,18 @@ public class WebSocketEventHandler {
 		StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
 		String sessionId = accessor.getSessionId();//웹소켓의 세션 ID(같은 사용자라도 기기가 다르면 다르게 나옴)
 		String accessToken = accessor.getFirstNativeHeader("accessToken");
-		log.debug("사용자 접속");
+		//log.debug("사용자 접속");
 		
 		if(accessToken == null) return; //비회원 차단
 	}
 	
 	@EventListener
 	public void whenUserSubscribe(SessionSubscribeEvent event) {
-		log.debug("채널 구독 완료");
+		//log.debug("채널 구독 완료");
 	}
 	
 	@EventListener
 	public void whenUserLeave(SessionDisconnectEvent event) {
-		log.debug("사용자 접속 종료");
+		//log.debug("사용자 접속 종료");
 	}
 }
