@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="invite">
+	<!-- 보드에 초대 -->
+	<select id="boardInviteSequence" resultType="long">
+		select board_invite_seq.nextval from dual
+	</select>
+	
+	<insert id="createBoardInvite">
+		insert into board_invite(
+			board_invite_no, board_no, sender_no, receiver_no
+		)
+		values(
+			#{boardInviteNo}, #{boardNo}, #{senderNo}, #{receiverNo}
+		)
+	</insert>
+	
+	<!-- 보드 초대 목록 -->
+	<select id="selectInviteViewList" resultType="InviteViewDto">
+		select * from invite_view where receiver_no = #{accountNo}
+	</select>
+	
+	<!-- 읽지 않은 초대장 -->
+	<select id="unreadInviteCount" resultType="int">
+		select count(*) from board_invite where receiver_no = #{accountNo} and board_invite_read = 'N'
+	</select>
+	
+	<!-- 초대장 메시지 전부 읽음 처리 -->
+	<update id="readInvite">
+		update board_invite set board_invite_read = 'Y' where receiver_no = #{accountNo}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+

@@ -89,21 +89,4 @@ public class BoardRestController {
 		}
 	}
 	
-	//보드 초대장 보내기
-	@PostMapping("/invite")
-	public void invite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
-		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
-		long accountNo = claimVO.getUserNo();
-		boardInviteDto.setSenderNo(accountNo);
-		boardDao.createBoardInvite(boardInviteDto);
-	}
-	
-	//초대장 리스트 화면
-	@GetMapping("/invite")
-	public List<InviteViewDto> inviteList(@RequestHeader("Authorization") String accessToken) {
-		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
-		long accountNo = claimVO.getUserNo();
-		return boardDao.selectInviteViewList(accountNo);
-	}
-	
 }

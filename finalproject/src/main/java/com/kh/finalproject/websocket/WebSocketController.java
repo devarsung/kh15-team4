@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.kh.finalproject.dao.AccountDao;
 import com.kh.finalproject.dao.BoardDao;
+import com.kh.finalproject.dao.InviteDao;
 import com.kh.finalproject.dto.AccountDto;
 import com.kh.finalproject.dto.BoardInviteDto;
 import com.kh.finalproject.service.TokenService;
@@ -69,6 +70,8 @@ public class WebSocketController {
 	private AccountDao accountDao;
 	@Autowired
 	private BoardDao boardDao;
+	@Autowired
+	private InviteDao inviteDao;
 	
 	@MessageMapping("/invite")
 	public void invite(Message<BoardInviteDto> message) {
@@ -87,23 +90,22 @@ public class WebSocketController {
 		
 		
 		//초대장을 보낸 상대가 이미 보드의 멤버인지 확인
+		//거절 이력 확인
+		//pending 상태의 초대장이 있는지 확인
 		boolean isMember = boardDao.selectBoardMember(body.getBoardNo(), body.getReceiverNo());
 		if(isMember == false) {
 			body.setSenderNo(accountDto.getAccountNo());
-			//boardDao.createBoardInvite(body);
+			//초대장 보내기
+			InviteResponseVO response = InviteResponseVO.builder().hasInvitation(true).build();
+			messagingTemplate.convertAndSend("/private/invite/" + body.getReceiverNo(), response);
+			
+			//db 저장
+			//inviteDao.createBoardInvite(body);
+		}
+		else {
+			log.debug("같은 사람");
 		}
 		
-		log.debug("body = {}", body);
-		
-		//[2]무슨 처리를 한다
-//		ResponseVO response = ResponseVO.builder()
-//				.content(content)
-//				.time(LocalDateTime.now())
-//			.build();
-//		
-//		//[3]수동으로 메세지를 보내자
-//		//messagingTemplate.convertAndSend("채널명", 데이터);
-//		messagingTemplate.convertAndSend("/private/invite/" + body.getReceiverNo(), body);
 	}
 	
 }
