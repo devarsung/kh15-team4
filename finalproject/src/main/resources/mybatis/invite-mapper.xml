@@ -24,8 +24,22 @@
 		<if test="boardInviteStatus != null">
 			and board_invite_status = #{boardInviteStatus}
 		</if>
+		<if test="boardNo != 0">
+			and board_no = #{boardNo}
+		</if>
 		
 		order by board_invite_no desc
+	</select>
+	
+	<!-- 받은 보드 초대장 카운트 -->
+	<select id="selectInviteViewCount" resultType="int">
+		select count(*) from invite_view where receiver_no = #{receiverNo}
+		<if test="boardInviteStatus != null">
+			and board_invite_status = #{boardInviteStatus}
+		</if>
+		<if test="boardNo != 0">
+			and board_no = #{boardNo}
+		</if>
 	</select>
 	
 	<!-- 읽지 않은 초대장 -->
@@ -62,6 +76,11 @@
 			#{inviteRejectNo}, #{boardNo}, #{accountNo}, systimestamp
 		)
 	</insert>
+	
+	<!-- 이사람이 이 보드를 거절한 적이 있는지 -->
+	<select id="selectRejectHistory" resultType="int">
+		select count(*) from invite_reject where board_no = #{boardNo} and account_no = #{accountNo}
+	</select>
 	
 </mapper>
 

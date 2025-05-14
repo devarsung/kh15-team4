@@ -16,6 +16,7 @@ import com.kh.finalproject.dto.AccountDto;
 import com.kh.finalproject.dto.BoardInviteDto;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
+import com.kh.finalproject.vo.InviteToResponseVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,11 +94,12 @@ public class WebSocketController {
 		//거절 이력 확인
 		//pending 상태의 초대장이 있는지 확인
 		boolean isMember = boardDao.selectBoardMember(body.getBoardNo(), body.getReceiverNo());
-		boolean isPending = true;
+		
+		
 		if(isMember == false) {
 			body.setSenderNo(accountDto.getAccountNo());
 			//초대장 보내기
-			InviteResponseVO response = InviteResponseVO.builder().hasInvitation(true).build();
+			InviteToResponseVO response = InviteToResponseVO.builder().hasInvitation(true).build();
 			messagingTemplate.convertAndSend("/private/invite/" + body.getReceiverNo(), response);
 			
 			//db 저장

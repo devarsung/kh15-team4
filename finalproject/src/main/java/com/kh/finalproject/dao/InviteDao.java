@@ -1,6 +1,8 @@
 package com.kh.finalproject.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,13 @@ public class InviteDao {
 	
 	//유저의 초대장 목록
 	public List<InviteViewDto> selectInviteViewList(BoardInviteDto boardInviteDto) {
-		System.out.println("레스트" + boardInviteDto);
 		return sqlSession.selectList("invite.selectInviteViewList", boardInviteDto);
+	}
+	
+	//유저의 초대장 목록 카운트
+	public boolean selectInviteViewCount(BoardInviteDto boardInviteDto) {
+		int count = sqlSession.selectOne("invite.selectInviteViewCount", boardInviteDto);
+		return count > 0;
 	}
 	
 	//읽지 않은 초대장이 있는가
@@ -52,7 +59,16 @@ public class InviteDao {
 	//거절 이력 생성
 	public void createInviteReject(InviteRejectDto inviteRejectDto) {
 		long sequence = sqlSession.selectOne("invite.rejectSequence");
-		inviteRejectDto.setAccountNo(sequence);
+		inviteRejectDto.setInviteRejectNo(sequence);
 		sqlSession.insert("invite.createInviteReject", inviteRejectDto);
+	}
+	
+	//이사람이 이보드를 거절한 적이 있는지 확인
+	public boolean selectRejectHistory(long boardNo, long accountNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("boardNo", boardNo);
+		params.put("accountNo", accountNo);
+		int count = sqlSession.selectOne("invite.selectRejectHistory", params); 
+		return count > 0;
 	}
 }

@@ -16,8 +16,10 @@ import com.kh.finalproject.dao.InviteDao;
 import com.kh.finalproject.dto.BoardInviteDto;
 import com.kh.finalproject.dto.InviteRejectDto;
 import com.kh.finalproject.dto.InviteViewDto;
+import com.kh.finalproject.service.InviteService;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
+import com.kh.finalproject.vo.InviteFromResponseVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,14 +33,17 @@ public class InviteRestController {
 	private TokenService tokenService;
 	@Autowired
 	private InviteDao inviteDao;
+	@Autowired
+	private InviteService inviteService;
 	
 	//보드 초대장 보내기
 	@PostMapping("/")
-	public void invite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
+	public InviteFromResponseVO invite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		long accountNo = claimVO.getUserNo();
 		boardInviteDto.setSenderNo(accountNo);
-		inviteDao.createBoardInvite(boardInviteDto);
+		InviteFromResponseVO result = inviteService.sendInvite(boardInviteDto);
+		return result;
 	}
 	
 	//초대장 리스트 화면
@@ -73,10 +78,11 @@ public class InviteRestController {
 	
 	@PatchMapping("/reject")
 	public void rejectInvite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
-		System.out.println(boardInviteDto);
-		//inviteDao.rejectInvite(boardInviteDto);
-//		InviteRejectDto.builder().boardNo(0).accountNo(0).build();
-//		inviteDao.createInviteReject(null);
+		//초대장 -> reject로 변경
+		inviteDao.rejectInvite(boardInviteDto);
+		//거절 내역 생성하기
+		InviteRejectDto inviteRejectDto = InviteRejectDto.builder().boardNo(boardInviteDto.getBoardNo()).accountNo(boardInviteDto.getReceiverNo()).build();
+		inviteDao.createInviteReject(inviteRejectDto);
 	}
 
 }
