@@ -96,4 +96,12 @@ public class BoardRestController {
 		}
 	}
 	
+	//이 보드의 멤버인지 아닌지만
+	@GetMapping("/member/{boardNo}")
+	public boolean memberCheck(@PathVariable long boardNo, @RequestHeader("Authorization") String accessToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		long accountNo = claimVO.getUserNo();
+		return boardDao.selectBoardMember(boardNo, accountNo);
+	}
+	
 }

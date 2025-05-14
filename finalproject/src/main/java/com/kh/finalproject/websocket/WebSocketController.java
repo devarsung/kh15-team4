@@ -31,40 +31,6 @@ public class WebSocketController {
 	//더 복잡한 처리를 위해 수동을 메세지 전송해야한다 -> 도구 필요(SimpMessagingTemplate)
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
-	
-	//메세지 수신을 좀 더 체계적인 형태은 Message<?>로 수신
-	//- 장점: STOMP의 헤더와 바디를 각각 읽어서 처리할 수 있다(인증 등에 유리)
-	//=> [1] 프론트에서 /app/chat ~ 으로 보내면
-	@MessageMapping("/chat")
-	public void chat(Message<ActionVO> message) {
-		//정보 분석(header)
-		StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-		String uuid = accessor.getFirstNativeHeader("uuid");
-		
-		//메세지 해석(body)
-		ActionVO body = message.getPayload();
-		
-		//[2]무슨 처리를 한다
-		String regex = "";
-		String content = body.getContent();
-		if(content.matches(regex)) {//조건 작동안함
-			content = content.replaceAll(regex, "*****");
-			//추가로 보낸사람에게 경고메세지 발송
-			messagingTemplate.convertAndSend("/pravate/chat/" + uuid);
-		}
-		
-		
-		
-		ResponseVO response = ResponseVO.builder()
-				.content(content)
-				.time(LocalDateTime.now())
-			.build();
-		
-		//[3]수동으로 메세지를 보내자
-		//messagingTemplate.convertAndSend("채널명", 데이터);
-		messagingTemplate.convertAndSend("/public/chat", body);
-	}
-	
 	@Autowired
 	private TokenService tokenService;
 	@Autowired
@@ -89,12 +55,10 @@ public class WebSocketController {
 		//메세지 해석(body)
 		BoardInviteDto body = message.getPayload();
 		
-		
 		//초대장을 보낸 상대가 이미 보드의 멤버인지 확인
 		//거절 이력 확인
 		//pending 상태의 초대장이 있는지 확인
 		boolean isMember = boardDao.selectBoardMember(body.getBoardNo(), body.getReceiverNo());
-		
 		
 		if(isMember == false) {
 			body.setSenderNo(accountDto.getAccountNo());
