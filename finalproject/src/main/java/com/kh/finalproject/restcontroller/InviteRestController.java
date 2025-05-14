@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dao.InviteDao;
 import com.kh.finalproject.dto.BoardInviteDto;
 import com.kh.finalproject.dto.InviteRejectDto;
 import com.kh.finalproject.dto.InviteViewDto;
+import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.service.InviteService;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
@@ -33,6 +35,8 @@ public class InviteRestController {
 	private TokenService tokenService;
 	@Autowired
 	private InviteDao inviteDao;
+	@Autowired
+	private BoardDao boardDao;
 	@Autowired
 	private InviteService inviteService;
 	
@@ -71,14 +75,30 @@ public class InviteRestController {
 		inviteDao.readInvite(accountNo);
 	}
 	
+	//초대 수락하기
 	@PatchMapping("/accept")
-	public void acceptInvite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
+	public long acceptInvite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		long accountNo = claimVO.getUserNo();
+		if(accountNo != boardInviteDto.getReceiverNo()) {
+			throw new TargetNotFoundException("사용자가 다릅니다");
+		}
+		//초대장 -> ACCEPTED 로 변경
 		inviteDao.acceptInvite(boardInviteDto);
+		//보드의 멤버인지 확인 후 추가
+		boolean isMember = boardDao.selectBoardMember(boardInviteDto.getBoardNo(), boardInviteDto.getReceiverNo());
+		if(isMember) {
+			throw new TargetNotFoundException("이미 멤버입니다.");
+		} 
+		
+		boardDao.enterBoard(boardInviteDto.getBoardNo(), boardInviteDto.getReceiverNo());
+		return boardInviteDto.getBoardNo();
 	}
 	
+	//초대 거절하기
 	@PatchMapping("/reject")
 	public void rejectInvite(@RequestHeader("Authorization") String accessToken, @RequestBody BoardInviteDto boardInviteDto) {
-		//초대장 -> reject로 변경
+		//초대장 -> reREJECTEDject로 변경
 		inviteDao.rejectInvite(boardInviteDto);
 		//거절 내역 생성하기
 		InviteRejectDto inviteRejectDto = InviteRejectDto.builder().boardNo(boardInviteDto.getBoardNo()).accountNo(boardInviteDto.getReceiverNo()).build();

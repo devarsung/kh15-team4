@@ -17,6 +17,16 @@
 		select * from board where account_no = #{accountNo}
 	</select>
 	
+	<select id="selectGuestBoardList" resultType="GuestBoardDto">
+		with guest_board as (
+			select bm.board_no, b.board_title, b.account_no as creator_no
+			from board_member bm join board b on bm.board_no = b.board_no
+			where bm.account_no = #{accountNo} and bm.account_no != b.account_no
+		)
+    	select gb.board_no, gb.board_title, gb.creator_no, a.account_nickname
+    	from guest_board gb join account a on gb.creator_no = a.account_no
+	</select>
+	
 	<select id="selectOne" resultType="BoardDto">
 		select * from board where board_no = #{boardNo}
 	</select>

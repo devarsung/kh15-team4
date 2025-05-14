@@ -1,6 +1,8 @@
 package com.kh.finalproject.restcontroller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dto.BoardDto;
-import com.kh.finalproject.dto.BoardInviteDto;
-import com.kh.finalproject.dto.InviteViewDto;
+import com.kh.finalproject.dto.GuestBoardDto;
 import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
@@ -44,12 +45,18 @@ public class BoardRestController {
 		return boardNo;
 	}
 	
-	//유저의 보드 리스트 조회
+	//유저의 보드 리스트 조회, 게스트 보드 리스트도 조회
 	@GetMapping("/")
-	public List<BoardDto> list(@RequestHeader("Authorization") String accessToken) {
+	public Map<String, Object> list(@RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		long accountNo = claimVO.getUserNo();
-		List<BoardDto> result = boardDao.selectBoardList(accountNo);
+		//나의 보드
+		List<BoardDto> boardList = boardDao.selectBoardList(accountNo);
+		//게스트 보드
+		List<GuestBoardDto> guestBoardList = boardDao.selectGuestBoardList(accountNo);
+		Map<String, Object> result = new HashMap<>();
+		result.put("boardList", boardList);
+		result.put("guestBoardList", guestBoardList);
 		return result;
 	}
 	
@@ -73,7 +80,7 @@ public class BoardRestController {
 		boardDao.deleteBoard(boardNo);
 	}
 	
-	//보드에 입장하는
+	//보드에 입장하는 -> 사용 x
 	@PostMapping("/enter/{boardNo}")
 	public void enter(@PathVariable long boardNo, @RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);

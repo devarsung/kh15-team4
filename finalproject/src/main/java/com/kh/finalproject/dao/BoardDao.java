@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.finalproject.dto.BoardDto;
-import com.kh.finalproject.dto.BoardInviteDto;
-import com.kh.finalproject.dto.InviteViewDto;
+import com.kh.finalproject.dto.GuestBoardDto;
 
 @Repository
 public class BoardDao {
@@ -27,6 +26,10 @@ public class BoardDao {
 	
 	public List<BoardDto> selectBoardList(long accountNo) {
 		return sqlSession.selectList("board.selectBoardList", accountNo);
+	}
+	
+	public List<GuestBoardDto> selectGuestBoardList(long accountNo) {
+		return sqlSession.selectList("board.selectGuestBoardList", accountNo);
 	}
 
 	public BoardDto selectOne(long boardNo) {
