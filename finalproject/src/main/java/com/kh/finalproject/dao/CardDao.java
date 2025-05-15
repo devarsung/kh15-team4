@@ -46,6 +46,6 @@ public class CardDao {
 	
 	//카드 지우기
 	public boolean deleteCard(long cardNo) {
-		return sqlSession.delete("lane.deleteCard", cardNo) > 0;
+		return sqlSession.delete("card.deleteCard", cardNo) > 0;
 	}
 }

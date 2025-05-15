@@ -17,6 +17,7 @@ import com.kh.finalproject.dao.LaneDao;
 import com.kh.finalproject.dto.LaneDto;
 import com.kh.finalproject.dto.LaneFullDto;
 import com.kh.finalproject.error.TargetNotFoundException;
+import com.kh.finalproject.service.BoardService;
 
 @CrossOrigin
 @RestController
@@ -25,6 +26,8 @@ public class LaneRestController {
 	
 	@Autowired
 	private LaneDao laneDao;
+	@Autowired
+	private BoardService boardService;
 	
 	//보드의 레인 리스트
 	@GetMapping("/{boardNo}")
@@ -38,17 +41,21 @@ public class LaneRestController {
 		return laneDao.selectLaneFullList(boardNo);
 	}
 	
+	///////////////////////////////////////////////////////////////////////
+	
 	//보드에 레인 생성
 	@PostMapping("/{boardNo}")
 	public void create(@PathVariable long boardNo, @RequestBody LaneDto laneDto) {
 		laneDto.setBoardNo(boardNo);
 		laneDao.createLane(laneDto);
+		boardService.sendMessage(boardNo);
 	}
 	
 	//lane order 변경
-	@PutMapping("/order")
-	public void updateOrder(@RequestBody List<LaneDto> laneDtoList) {
+	@PutMapping("/{boardNo}/order")
+	public void updateOrder(@PathVariable long boardNo, @RequestBody List<LaneDto> laneDtoList) {
 		laneDao.updateOrderAll(laneDtoList);
+		boardService.sendMessage(boardNo);
 	}
 	
 	//no로 레인 삭제
@@ -62,12 +69,16 @@ public class LaneRestController {
 		
 		//보드의 나머지 레인 order 변경
 		List<LaneDto> lanes = laneDao.selectLaneList(boardNo);
-		if(lanes.size() <= 0) return;
+		if(lanes.size() <= 0) {
+			boardService.sendMessage(boardNo);
+			return;
+		}
 		
 		for (int i = 0; i < lanes.size(); i++) {
 		    lanes.get(i).setLaneOrder(i + 1);
 		}
 		laneDao.updateOrderAll(lanes);
+		boardService.sendMessage(boardNo);
 	}
 
 }

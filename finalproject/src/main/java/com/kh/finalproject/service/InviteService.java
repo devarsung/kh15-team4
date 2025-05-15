@@ -2,7 +2,7 @@ package com.kh.finalproject.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dao.InviteDao;
@@ -13,7 +13,7 @@ import com.kh.finalproject.vo.InviteToResponseVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Repository
+@Service
 public class InviteService {
 	
 	@Autowired
