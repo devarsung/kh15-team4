@@ -44,6 +44,12 @@
 		select count(*) from board_member where board_no = #{boardNo} and account_no = #{accountNo}
 	</select>
 	
+	<select id="selectBoardMemberList" resultType="BoardMemberVO">
+		select bm.board_no, a.account_no, a.account_nickname, a.account_email 
+		from board_member bm join account a on bm.account_no = a.account_no 
+		where bm.board_no = #{boardNo}
+	</select>
+	
 </mapper>
 
 

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-//보드에서 공개될 유저의 정보
+//보드에서 공개될 유저의 정보 + 실시간 접속자 관리용 세션들까지
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(of = {"accountNo"})
 public class UserInfoVO {

@@ -20,6 +20,7 @@ import com.kh.finalproject.dto.BoardDto;
 import com.kh.finalproject.dto.GuestBoardDto;
 import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.service.TokenService;
+import com.kh.finalproject.vo.BoardMemberVO;
 import com.kh.finalproject.vo.ClaimVO;
 
 @CrossOrigin
@@ -102,6 +103,12 @@ public class BoardRestController {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		long accountNo = claimVO.getUserNo();
 		return boardDao.selectBoardMember(boardNo, accountNo);
+	}
+	
+	//보드의 멤버 리스트
+	@GetMapping("/members/{boardNo}")
+	public List<BoardMemberVO> memberList(@PathVariable long boardNo) {
+		return boardDao.selectBoardMemberList(boardNo);
 	}
 	
 }
