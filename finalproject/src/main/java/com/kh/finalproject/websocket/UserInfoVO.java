@@ -14,4 +14,5 @@ public class UserInfoVO {
 	private String accountNickname;
 	private String accountEmail;
 	private String subscriptionId; //구독 id
+	private String sessionId; //세션 id
 }
