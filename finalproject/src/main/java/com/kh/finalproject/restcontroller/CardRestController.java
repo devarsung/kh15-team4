@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.finalproject.dao.CardDao;
 import com.kh.finalproject.dto.CardDto;
+import com.kh.finalproject.dto.ColorDto;
 import com.kh.finalproject.error.TargetNotFoundException;
 import com.kh.finalproject.service.BoardService;
+import com.kh.finalproject.vo.ColumnValueVO;
 import com.kh.finalproject.vo.OrderDataVO;
 
 @CrossOrigin
@@ -83,5 +86,22 @@ public class CardRestController {
 	@GetMapping("/detail/{cardNo}")
 	public CardDto detail(@PathVariable long cardNo) {
 		return cardDao.selectOne(cardNo);
+	}
+	
+	//카드 컬러 변경
+	@PatchMapping("/{boardNo}/color/{cardNo}")
+	public void changeColor(@PathVariable long boardNo, @PathVariable long cardNo, @RequestBody ColorDto colorDto) {
+		cardDao.updateCardColor(cardNo,  colorDto);
+		boardService.sendMessage(boardNo);
+	}
+	
+	//카드 패치 변경
+	@PatchMapping("/{boardNo}/{cardNo}")
+	public void patchCard(@PathVariable long boardNo, @PathVariable long cardNo, @RequestBody ColumnValueVO vo) {
+		CardDto findDto = cardDao.selectOne(cardNo);
+		if(findDto == null)
+			throw new TargetNotFoundException();
+		boolean success = cardDao.updateCard(cardNo, vo);
+		boardService.sendMessage(boardNo);
 	}
 }

@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class LaneFullDto {
 	private LaneDto laneDto;
-	private List<CardDto> cardList;
+	private List<CardFullDto> cardList;
 }

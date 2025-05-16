@@ -68,10 +68,16 @@
 	    	<result column="lane_order" property="laneOrder"/>
 	    	<result column="board_no" property="boardNo"/>
 	 	</association>
-	 	<collection property="cardList" javaType="List" ofType="CardDto" select="selectCardList" column="lane_no">
+	 	<collection property="cardList" javaType="List" ofType="CardFullDto" select="selectCardFullList" column="lane_no">
 	        <result column="card_no" property="cardNo"/>
 	 		<result column="card_title" property="cardTitle"/>
 	 		<result column="card_order" property="cardOrder"/>
+	 		<result column="card_color" property="cardColor"/>
+	 		<result column="card_complete" property="cardComplete"/>
+	 		<result column="card_pic" property="cardPic"/>
+	 		<result column="account_no" property="accountNo"/>
+	 		<result column="account_nickname" property="accountNickname"/>
+	 		<result column="account_email" property="accountEmail"/>
 	 		<result column="lane_no" property="laneNo"/>
 	    </collection>
 	 </resultMap>
@@ -82,6 +88,12 @@
 	
 	<select id="selectCardList" resultType="CardDto">
 		select * from card where lane_no = #{laneNo} order by card_order asc
+	</select>
+	
+	<select id="selectCardFullList" resultType="CardFullDto">
+		select c.*, a.account_no, a.account_nickname, a.account_email 
+		from card c left outer join account a on c.card_pic = a.account_no 
+		where c.lane_no = #{laneNo} order by c.card_order asc
 	</select>
 	
 </mapper>

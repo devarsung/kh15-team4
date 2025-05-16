@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.finalproject.dto.CardDto;
+import com.kh.finalproject.dto.ColorDto;
+import com.kh.finalproject.vo.ColumnValueVO;
 
 @Repository
 public class CardDao {
@@ -47,5 +49,22 @@ public class CardDao {
 	//카드 지우기
 	public boolean deleteCard(long cardNo) {
 		return sqlSession.delete("card.deleteCard", cardNo) > 0;
+	}
+	
+	//카드 컬러 변경하기 - 안쓸예정
+	public void updateCardColor(long cardNo, ColorDto colorDto) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("cardNo", cardNo);
+		params.put("colorCode", colorDto.getColorCode());
+		sqlSession.update("card.updateCardColor", params);
+	}
+	
+	//카드 부분 수정
+	public boolean updateCard(long cardNo, ColumnValueVO vo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("cardNo", cardNo);
+		params.put("column", vo.getColumn());
+		params.put("value", vo.getValue());
+		return sqlSession.update("card.updateCard", params) > 0;
 	}
 }

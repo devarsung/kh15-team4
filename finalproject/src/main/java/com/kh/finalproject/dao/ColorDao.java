@@ -17,4 +17,5 @@ public class ColorDao {
 	public List<ColorDto> selectColorList() {
 		return sqlSession.selectList("color.selectColorList");
 	}
+	
 }

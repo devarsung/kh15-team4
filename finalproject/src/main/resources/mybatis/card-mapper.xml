@@ -50,6 +50,20 @@
 	<select id="selectOne" resultType="CardDto">
 		select * from card where card_no = #{cardNo}
 	</select>
+	
+	<update id="updateCardColor">
+		update card set card_color = #{colorCode} where card_no = #{cardNo}
+	</update>
+	
+	<update id="updateCard">
+		update card set 
+		 <choose>
+        	<when test="column == 'color'">card_color = #{value}</when>
+        	<when test="column == 'complete'">card_complete = #{value}</when>
+        	<when test="column == 'pic'">card_pic = #{value}</when>
+       	</choose>
+		where card_no = #{cardNo}
+	</update>
 </mapper>
 
 
