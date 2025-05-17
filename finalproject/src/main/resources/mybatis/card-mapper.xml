@@ -58,6 +58,7 @@
 	<update id="updateCard">
 		update card set 
 		 <choose>
+		 	<when test="column == 'title'">card_title = #{value}</when>
         	<when test="column == 'color'">card_color = #{value}</when>
         	<when test="column == 'complete'">card_complete = #{value}</when>
         	<when test="column == 'pic'">card_pic = #{value}</when>

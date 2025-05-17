@@ -50,6 +50,10 @@
 		where bm.board_no = #{boardNo}
 	</select>
 	
+	<update id="updateBoardTitle">
+		update board set board_title = #{boardTitle} where board_no = #{boardNo}
+	</update>
+	
 </mapper>
 
 

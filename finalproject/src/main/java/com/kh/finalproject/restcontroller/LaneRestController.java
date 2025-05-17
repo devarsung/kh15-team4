@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -78,6 +79,13 @@ public class LaneRestController {
 		    lanes.get(i).setLaneOrder(i + 1);
 		}
 		laneDao.updateOrderAll(lanes);
+		boardService.sendMessage(boardNo);
+	}
+	
+	//제목 변경
+	@PatchMapping("/{boardNo}/title/{laneNo}")
+	public void changeTitle(@PathVariable long boardNo, @PathVariable long laneNo, @RequestBody LaneDto laneDto) {
+		laneDao.updateLaneTitle(laneNo, laneDto);
 		boardService.sendMessage(boardNo);
 	}
 

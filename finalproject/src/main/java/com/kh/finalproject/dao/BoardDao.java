@@ -62,4 +62,11 @@ public class BoardDao {
 		return sqlSession.selectList("board.selectBoardMemberList", boardNo);
 	}
 	
+	//보드 제목 변경
+	public void updateBoardTitle(long boardNo, BoardDto boardDto) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("boardNo", boardNo);
+		params.put("boardTitle", boardDto.getBoardTitle());
+		sqlSession.update("board.updateBoardTitle", params);
+	}
 }

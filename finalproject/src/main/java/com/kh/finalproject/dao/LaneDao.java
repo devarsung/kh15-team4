@@ -56,5 +56,13 @@ public class LaneDao {
 	public boolean deleteLane(long laneNo) {
 		return sqlSession.delete("lane.deleteLane", laneNo) > 0;
 	}
+
+	//제목 변경
+	public void updateLaneTitle(long laneNo, LaneDto laneDto) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("laneNo", laneNo);
+		params.put("laneTitle", laneDto.getLaneTitle());
+		sqlSession.update("lane.updateLaneTitle", params);
+	}
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dto.BoardDto;
 import com.kh.finalproject.dto.GuestBoardDto;
 import com.kh.finalproject.error.TargetNotFoundException;
+import com.kh.finalproject.service.BoardService;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.BoardMemberVO;
 import com.kh.finalproject.vo.ClaimVO;
@@ -32,6 +34,8 @@ public class BoardRestController {
 	private BoardDao boardDao;
 	@Autowired
 	private TokenService tokenService;
+	@Autowired
+	private BoardService boardService;
 	
 	//보드 생성
 	@PostMapping("/")
@@ -109,6 +113,12 @@ public class BoardRestController {
 	@GetMapping("/members/{boardNo}")
 	public List<BoardMemberVO> memberList(@PathVariable long boardNo) {
 		return boardDao.selectBoardMemberList(boardNo);
+	}
+	
+	@PatchMapping("/title/{boardNo}")
+	public void changeTitle(@PathVariable long boardNo, @RequestBody BoardDto boardDto) {
+		boardDao.updateBoardTitle(boardNo, boardDto);
+		boardService.sendBoardInfo(boardNo);
 	}
 	
 }

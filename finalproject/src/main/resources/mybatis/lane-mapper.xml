@@ -96,6 +96,10 @@
 		where c.lane_no = #{laneNo} order by c.card_order asc
 	</select>
 	
+	<!-- 레인 제목 변경 -->
+	<update id="updateLaneTitle">
+		update lane set lane_title = #{laneTitle} where lane_no = #{laneNo}
+	</update>
 </mapper>
 
 
