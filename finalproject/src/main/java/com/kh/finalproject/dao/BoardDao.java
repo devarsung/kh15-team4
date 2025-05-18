@@ -69,4 +69,12 @@ public class BoardDao {
 		params.put("boardTitle", boardDto.getBoardTitle());
 		sqlSession.update("board.updateBoardTitle", params);
 	}
+	
+	//보드에서 나가기
+	public void leaveBoard(long boardNo, long accountNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("boardNo", boardNo);
+		params.put("accountNo", accountNo);
+		sqlSession.delete("board.leaveBoard", params);
+	}
 }

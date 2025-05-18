@@ -65,6 +65,14 @@
        	</choose>
 		where card_no = #{cardNo}
 	</update>
+	
+	<update id="clearCardPic">
+		update card set card_pic = null 
+		where card_pic = #{accountNo}
+		and lane_no in(
+			select lane_no from lane where board_no = #{boardNo}
+		)
+	</update>
 </mapper>
 
 

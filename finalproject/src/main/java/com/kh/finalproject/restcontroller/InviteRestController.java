@@ -18,6 +18,7 @@ import com.kh.finalproject.dto.BoardInviteDto;
 import com.kh.finalproject.dto.InviteRejectDto;
 import com.kh.finalproject.dto.InviteViewDto;
 import com.kh.finalproject.error.TargetNotFoundException;
+import com.kh.finalproject.service.BoardService;
 import com.kh.finalproject.service.InviteService;
 import com.kh.finalproject.service.TokenService;
 import com.kh.finalproject.vo.ClaimVO;
@@ -39,6 +40,8 @@ public class InviteRestController {
 	private BoardDao boardDao;
 	@Autowired
 	private InviteService inviteService;
+	@Autowired
+	private BoardService boardService;
 	
 	//보드 초대장 보내기
 	@PostMapping("/")
@@ -92,6 +95,7 @@ public class InviteRestController {
 		} 
 		
 		boardDao.enterBoard(boardInviteDto.getBoardNo(), boardInviteDto.getReceiverNo());
+		boardService.sendMemberList(boardInviteDto.getBoardNo());
 		return boardInviteDto.getBoardNo();
 	}
 	

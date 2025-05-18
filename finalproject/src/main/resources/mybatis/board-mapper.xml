@@ -54,6 +54,10 @@
 		update board set board_title = #{boardTitle} where board_no = #{boardNo}
 	</update>
 	
+	<delete id="leaveBoard">
+		delete board_member where board_no = #{boardNo} and account_no = #{accountNo}
+	</delete>
+	
 </mapper>
 
 

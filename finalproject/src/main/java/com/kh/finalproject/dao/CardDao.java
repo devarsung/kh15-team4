@@ -67,4 +67,12 @@ public class CardDao {
 		params.put("value", vo.getValue());
 		return sqlSession.update("card.updateCard", params) > 0;
 	}
+	
+	//담당자 null로 
+	public boolean clearCardPic(long boardNo, long accountNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("boardNo", boardNo);
+		params.put("accountNo", accountNo);
+		return sqlSession.update("card.clearCardPic", params) > 0;
+	}
 }

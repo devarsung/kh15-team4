@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.finalproject.dao.BoardDao;
+import com.kh.finalproject.dao.CardDao;
 import com.kh.finalproject.dto.BoardDto;
 import com.kh.finalproject.dto.GuestBoardDto;
 import com.kh.finalproject.error.TargetNotFoundException;
@@ -36,6 +37,8 @@ public class BoardRestController {
 	private TokenService tokenService;
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private CardDao cardDao;
 	
 	//보드 생성
 	@PostMapping("/")
@@ -119,6 +122,23 @@ public class BoardRestController {
 	public void changeTitle(@PathVariable long boardNo, @RequestBody BoardDto boardDto) {
 		boardDao.updateBoardTitle(boardNo, boardDto);
 		boardService.sendBoardInfo(boardNo);
+	}
+	
+	//보드 나가기
+	@PostMapping("/{boardNo}/leave")
+	public void leaveBoard(@PathVariable long boardNo, @RequestHeader("Authorization") String accessToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		long accountNo = claimVO.getUserNo();
+		
+		//내가 담당중인 카드의 card_pic을 null로
+		cardDao.clearCardPic(boardNo, accountNo);
+		
+		//보드 멤버테이블에서 나가기
+		boardDao.leaveBoard(boardNo, accountNo);
+		
+		//메세지 전송
+		boardService.sendMessage(boardNo);
+		boardService.sendMemberList(boardNo);
 	}
 	
 }

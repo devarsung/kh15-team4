@@ -10,6 +10,7 @@ import com.kh.finalproject.dao.BoardDao;
 import com.kh.finalproject.dao.LaneDao;
 import com.kh.finalproject.dto.BoardDto;
 import com.kh.finalproject.dto.LaneFullDto;
+import com.kh.finalproject.vo.BoardMemberVO;
 import com.kh.finalproject.websocket.MessageResponseVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,14 @@ public class BoardService {
 		response.setType("patch");
 		BoardDto boardDto = boardDao.selectOne(boardNo);
 		response.setData(boardDto);
+		messagingTemplate.convertAndSend("/private/update/" + boardNo, response);
+	}
+	
+	public void sendMemberList(long boardNo) {
+		MessageResponseVO response = new MessageResponseVO();
+		response.setType("member");
+		List<BoardMemberVO> memberList = boardDao.selectBoardMemberList(boardNo);
+		response.setData(memberList);
 		messagingTemplate.convertAndSend("/private/update/" + boardNo, response);
 	}
 }
